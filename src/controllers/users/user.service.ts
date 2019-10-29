@@ -1,6 +1,7 @@
 import { Injectable } from "@mayajs/core";
 import { Models } from "@mayajs/mongo";
 
+import bcrypt from "bcryptjs";
 
 
 
@@ -23,19 +24,10 @@ export class UserServices {
         let reguser = {
           name: body.name,
           email: body.email,
-          password: body.password
+          password: bcrypt.hashSync(body.password, 10)
+
         }
 
-        // bcrypt.genSalt(10, (err: any, salt: any) => {
-        //   bcrypt.hash(reguser.password, salt, (err: any, hash: any) => {
-        //     if (err) throw err;
-        //     reguser.password = hash;
-        //     // newUser
-        //     //   .save()
-        //     //   .then(user => res.json(user))
-        //     //   .catch(err => console.log(err));
-        //   });
-        // });
 
         const newlyRegister = await this.model.create(reguser);
         return {status: 200, message: "Register Succesfully", data: newlyRegister, meta: {}}
@@ -45,7 +37,6 @@ export class UserServices {
       return { status: 404, message: error.errmsg ? error.errmsg : error.toString(), data: [], meta: {} };
     }
 
-    // Your logic here
     
   }
 
@@ -62,45 +53,6 @@ export class UserServices {
       const logInUser = await this.model.create(partialUser);
       return { status: 200, message: "Login Success", data: logInUser, meta: {}}
 
-
-
-      
-      // let reguser = {
-      //   name: body.name,
-      //   email: body.email,
-      //   password: body.password
-      // }
-
-      // const isMatch = await bcrypt.compare(body.password, partialUser.password);
-      // if (isMatch) {
-      //   // User matched
-      //   // Create JWT Payload
-      //   const payload = {
-      //     id: partialUser.id,
-      //     name: partialUser.name
-      //   };
-
-      //   // Sign token
-      //   jwt.sign(
-      //     payload,
-      //     keys.secretOrKey,
-      //     {
-      //       expiresIn: 31556926 // 1 year in seconds
-      //     },
-      //     (err: any, token: any) => {
-      //       return {
-      //         status: 200,
-      //         success: true,
-      //         token: "Bearer " + token
-      //       };
-      //     }
-      //   );
-      // } else {
-      //   return {
-      //     status: 401,
-      //     message: "Passwordd Incorrect"
-      //   }
-      // }
 
     } catch (error) {
       return { status: 400, message: error.errmsg ? error.errmsg : error.toString(), data: [], meta: {} };
