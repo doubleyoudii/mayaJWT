@@ -2,11 +2,7 @@ import { Schema, model } from "mongoose";
 import paginate from "mongoose-paginate";
 
 const UserSchema = new Schema({
-  // name: {
-  //   required: [true, "Name is required."],
-  //   type: String,
-  //   unique: true,
-  // },
+
   name: {
     type: String,
     required: true
